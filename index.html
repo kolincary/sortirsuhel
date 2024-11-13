@@ -40,6 +40,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            width: 100%;
+            padding: 0 20px;
         }
         .content h1 {
             font-size: 36px;
@@ -63,7 +65,7 @@
         }
         .scan-list {
             margin-top: 20px;
-            width: 80%;
+            width: 100%;
             max-width: 600px;
             text-align: left;
         }
@@ -80,9 +82,33 @@
             color: white;
         }
         #reader {
-            width: 300px;
+            width: 100%;
+            max-width: 300px;
             height: 300px;
             margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            .header {
+                font-size: 20px;
+                padding: 10px;
+            }
+            .header .title, .header .settings {
+                margin: 0 10px;
+            }
+            .content h1 {
+                font-size: 28px;
+            }
+            .content p {
+                font-size: 16px;
+            }
+            .plus-button {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            .scan-list th, .scan-list td {
+                padding: 6px;
+            }
         }
     </style>
 </head>
