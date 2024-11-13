@@ -1,0 +1,146 @@
+<html>
+<head>
+    <title>Scan to Sortir</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .header {
+            background-color: #04626c;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 0;
+        }
+        .header .title {
+            margin-left: 20px;
+        }
+        .header .settings {
+            margin-right: 20px;
+        }
+        .content {
+            margin-top: 100px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .content h1 {
+            font-size: 36px;
+            color: black;
+        }
+        .content p {
+            font-size: 18px;
+            color: black;
+        }
+        .plus-button {
+            background-color: #04626c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 30px;
+            cursor: pointer;
+            position: absolute;
+            bottom: 20px;
+        }
+        .scan-list {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            text-align: left;
+        }
+        .scan-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .scan-list th, .scan-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .scan-list th {
+            background-color: #04626c;
+            color: white;
+        }
+        #reader {
+            width: 300px;
+            height: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Scan to Sortir</div>
+        <div class="settings">
+            <i class="fas fa-cog"></i>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Selamat Datang.</h1>
+        <p>Anda siap untuk memulai pemindaian kode.</p>
+        <div class="scan-list" id="scan-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Barcode</th>
+                    </tr>
+                </thead>
+                <tbody id="scan-list-body">
+                    <!-- Scanned items will appear here -->
+                </tbody>
+            </table>
+        </div>
+        <div id="reader"></div>
+    </div>
+    <button class="plus-button" onclick="openCamera()"><i class="fas fa-camera"></i></button>
+
+    <script>
+        function openCamera() {
+            const html5QrCode = new Html5Qrcode("reader");
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                const now = new Date();
+                const dateTime = now.toLocaleString();
+
+                const scanListBody = document.getElementById('scan-list-body');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `<td>${dateTime}</td><td>${decodedText}</td>`;
+                scanListBody.appendChild(newRow);
+
+                html5QrCode.stop().then(ignore => {
+                    document.getElementById('reader').style.display = 'none';
+                }).catch(err => {
+                    console.error("Failed to stop scanning.", err);
+                });
+            };
+
+            const config = { fps: 10, qrbox: 250 };
+
+            html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                .catch(err => {
+                    console.error("Unable to start scanning.", err);
+                });
+
+            document.getElementById('reader').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
